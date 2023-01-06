@@ -15,7 +15,6 @@ npm create svelte@latest my-app
 ```
 
 ## Developing
-
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```bash
@@ -36,3 +35,10 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+
+curl -X POST https://www.strava.com/api/v3/oauth/token \
+  -d client_id=99379 \
+  -d client_secret=d0234d7acd6201da562cc3727730c1cbfb0d903a\
+  -d code=cbb5730495ce5382e5c2b31e7ab4a5bb6fa25c7a\
+  -d grant_type=authorization_code
