@@ -1,21 +1,18 @@
 <script>
-	import { token, authenticated } from '../../store';
+	import { token } from '../../store';
 
   /** @type {import('./$types').PageData} */
 	export let data;
 
   function clearToken() {
-    $token = undefined;
-    localStorage.removeItem("token");
-    $authenticated = false;
+    console.log("Clearing token")
+    $token = null;
     // navigate back to home page
     location.href = "/";
-    console.log("Reloading")
   }
-  console.log("token", $token)
 </script>
   
-<!-- <h1>{$token?.athete.firstname}'s Log</h1> -->
+<h1>{data.props.firstname}'s Log</h1>
 
 <button 
   type="button"
