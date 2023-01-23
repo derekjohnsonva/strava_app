@@ -1,3 +1,13 @@
+
+export interface APIError {
+    message: string;
+    errors:  Error[];
+}
+interface Error {
+    code:     string;
+    field:    string;
+    resource: string;
+}
 export interface StravaToken {
     token_type:    string;
     expires_at:    number;

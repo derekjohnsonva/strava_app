@@ -1,9 +1,13 @@
 <script lang="ts">
-	import { token } from '../../store';
+	import { token, startOfWeek, endOfWeek } from '../../store';
+	import { getActivities } from './utils';
 	import Activity from './Activity.svelte';
-	import {metersToMiles } from './utils';
-	import type { Activity as ActivityType } from '../../types'
+	import { metersToMiles } from './utils';
+	import { DateInput } from 'date-picker-svelte';
+	import type { Activity as ActivityType } from '../../types';
 	import type { PageData } from './$types';
+	import { invalidateAll } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	export let data: PageData;
 
@@ -52,16 +56,34 @@
 		return days;
 	};
 
-	// reduce to get total mileage for the week
 	let totalMileage = 0;
-	data.props.activities.forEach((activity) => {
-		totalMileage += Number(metersToMiles(activity.distance));
-	});
+	let sortedActivities = sortActivitiesByDay(data.props.activities);
+	$: {
+		totalMileage = 0;
+		data.props.activities.forEach((activity) => {
+			totalMileage += Number(metersToMiles(activity.distance));
+		});
+		sortedActivities = sortActivitiesByDay(data.props.activities);
+	}
 
-	const sortedActivities = sortActivitiesByDay(data.props.activities);
-
+	let selectedDate = new Date();
+	$: {
+		console.log('selectedDate changed', selectedDate);
+		const newStartOfWeek = selectedDate.setDate(
+			selectedDate.getDate() - ((selectedDate.getDay() + 6) % 7)
+		);
+		const newEndOfWeek = selectedDate.setDate(
+			selectedDate.getDate() - (((selectedDate.getDay() + 6) % 7) - 6)
+		);
+		if (newStartOfWeek !== $startOfWeek) {
+			$startOfWeek = newStartOfWeek;
+			$endOfWeek = newEndOfWeek;
+			getActivities(fetch, 1, 30, $endOfWeek / 1000, $startOfWeek / 1000).then((activities) => {
+				data.props.activities = activities;
+			});
+		}
+	}
 </script>
-
 
 <div class="max-w-6xl flex flex-col gap-9">
 	<!-- header -->
@@ -69,14 +91,15 @@
 	<h2 class="font-normal text-5xl text-green">
 		Weekly Mileage: {totalMileage.toFixed(2)}
 	</h2>
+	<DateInput bind:value={selectedDate} closeOnSelection={true} />
 	{#each daysOfTheWeekStartMonday as day}
 		{#if sortedActivities.get(day)}
-		<div class="flex flex-col gap-5">
-			<h3 class="font-normal text-3xl text-blue">{day}</h3>
-			{#each sortedActivities.get(day) as activity}
-				<Activity {activity} />
-			{/each}
-		</div>
+			<div class="flex flex-col gap-5">
+				<h3 class="font-normal text-3xl text-blue">{day}</h3>
+				{#each sortedActivities.get(day) as activity}
+					<Activity {activity} />
+				{/each}
+			</div>
 		{/if}
 	{/each}
 	<!-- logout button -->
