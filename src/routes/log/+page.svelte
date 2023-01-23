@@ -67,6 +67,7 @@
 	}
 
 	let selectedDate = new Date();
+	// TODO: Update dates so they occur at the start and end or monday and friday
 	$: {
 		console.log('selectedDate changed', selectedDate);
 		const newStartOfWeek = selectedDate.setDate(
