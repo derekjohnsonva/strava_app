@@ -1,21 +1,11 @@
 <script lang="ts">
+	import { metersPerSecToMinPerMile, metersToMiles } from './utils';
 	import type { Activity } from '../../types';
 	export let activity: Activity;
 
-	const metersToMiles = (meters: number) => {
-		return (meters * 0.000621371).toFixed(2);
-	};
-
-	const metersPerSecToMinPerMile = (metersPerSec: number) => {
-		const fractionalMinutes = 1 / (metersPerSec * 0.0372822715);
-		// convert fractional minutes to minutes and seconds
-		const minutes = Math.floor(fractionalMinutes);
-		const seconds = Math.floor((fractionalMinutes - minutes) * 60).toFixed(0);
-		return `${minutes}:${seconds}`;
-	};
 </script>
-
-<div class="flex flex-row p-0 gap-5 ">
+<!-- Add a margin to the div but not its children -->
+<div class="flex flex-row gap-5 text-grey-light m-0">
 	<!-- TODO: Find a more responsive way to keep things in line -->
 	<h4 class="w-36 flex-none">
 		{activity.name}
