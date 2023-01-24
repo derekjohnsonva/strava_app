@@ -67,10 +67,8 @@ export const load = (async ({ fetch, url }) => {
 	// We have to divide by 1000 because Strava expects seconds, not milliseconds
 	const activities = await getActivities(
 		fetch,
-		1,
-		60,
-		Math.floor(get(endOfWeek) / 1000),
-		Math.floor(get(startOfWeek) / 1000)
+		Math.floor(get(endOfWeek).getTime() / 1000),
+		Math.floor(get(startOfWeek).getTime() / 1000),
 	);
 	console.log('numberOfActivities', activities.length);
 	return {

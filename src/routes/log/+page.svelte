@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { token, startOfWeek, endOfWeek } from '../../store';
 	import { getActivities } from './utils';
+	import { getWeekRange } from '../../utils';
 	import Activity from './Activity.svelte';
 	import { metersToMiles } from './utils';
 	import { DateInput } from 'date-picker-svelte';
 	import type { Activity as ActivityType } from '../../types';
 	import type { PageData } from './$types';
-	import { invalidateAll } from '$app/navigation';
-	import { browser } from '$app/environment';
 
 	export let data: PageData;
 
@@ -43,15 +42,21 @@
 		return daysOfTheWeek[day];
 	};
 
-	// sort a list of activities into a map of days of the week
 	const sortActivitiesByDay = (activities: ActivityType[]) => {
-		const days = new Map();
+		// Sort activities by day of the week. Each day will by sorten by start time
+		const days: Map<string, ActivityType[]> = new Map();
 		activities.forEach((activity) => {
 			const day = getDayOfWeek(new Date(activity.start_date));
 			if (!days.get(day)) {
 				days.set(day, []);
 			}
-			days.get(day).push(activity);
+			days.get(day)?.push(activity);
+		});
+		// Sort each day by start time
+		days.forEach((day) => {
+			day.sort((a, b) => {
+				return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
+			});
 		});
 		return days;
 	};
@@ -69,18 +74,17 @@
 	let selectedDate = new Date();
 	$: {
 		console.log('selectedDate changed', selectedDate);
-		const newStartOfWeek = selectedDate.setDate(
-			selectedDate.getDate() - ((selectedDate.getDay() + 6) % 7)
-		);
-		const newEndOfWeek = selectedDate.setDate(
-			selectedDate.getDate() - (((selectedDate.getDay() + 6) % 7) - 6)
-		);
-		if (newStartOfWeek !== $startOfWeek) {
-			$startOfWeek = newStartOfWeek;
-			$endOfWeek = newEndOfWeek;
-			getActivities(fetch, 1, 30, $endOfWeek / 1000, $startOfWeek / 1000).then((activities) => {
-				data.props.activities = activities;
-			});
+		const newWeekRange = getWeekRange(selectedDate);
+		if (newWeekRange.start !== $startOfWeek) {
+			$startOfWeek = newWeekRange.start;
+			$endOfWeek = newWeekRange.end;
+			getActivities(fetch, $endOfWeek.getTime() / 1000, $startOfWeek.getTime() / 1000)
+				.then((activities) => {
+					data.props.activities = activities;
+				})
+				.catch((err) => {
+					console.error(err);
+				});
 		}
 	}
 </script>
@@ -93,14 +97,14 @@
 	</h2>
 	<DateInput bind:value={selectedDate} closeOnSelection={true} />
 	{#each daysOfTheWeekStartMonday as day}
-		{#if sortedActivities.get(day)}
-			<div class="flex flex-col gap-5">
-				<h3 class="font-normal text-3xl text-blue">{day}</h3>
+		<div class="flex flex-col gap-5">
+			<h3 class="font-normal text-3xl text-blue">{day}</h3>
+			{#if sortedActivities.get(day)}
 				{#each sortedActivities.get(day) as activity}
 					<Activity {activity} />
 				{/each}
-			</div>
-		{/if}
+			{/if}
+		</div>
 	{/each}
 	<!-- logout button -->
 	<div class="w-full flex flex-col items-center">

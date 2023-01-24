@@ -16,7 +16,7 @@ export const metersPerSecToMinPerMile = (metersPerSec: number) => {
 	return `${minutes}:${seconds}`;
 };
 
-export async function getActivities(fetch, page = 1, per_page = 30, before = 0, after = 0) {
+export async function getActivities(fetch, before = 0, after = 0, page = 1, per_page = 60): Promise<Activity[]> {
 	console.log("Getting activities")
 	let query = `https://www.strava.com/api/v3/activities?page=${page}&per_page=${per_page}`;
 	if (before) {
@@ -31,7 +31,6 @@ export async function getActivities(fetch, page = 1, per_page = 30, before = 0, 
 		}
 	});
 	const activitySummaries: ActivitySummary[] | APIError = await response.json();
-	console.log("Activities, ", activitySummaries)
 	// if this is an APIError, then log and return to login page
 	if ('message' in activitySummaries) {
 		console.log('Error getting activities: ', activitySummaries);
