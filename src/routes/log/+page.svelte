@@ -36,7 +36,6 @@
 		'Saturday',
 		'Sunday'
 	];
-
 	const getDayOfWeek = (date: Date) => {
 		const day = date.getDay();
 		return daysOfTheWeek[day];
@@ -95,10 +94,15 @@
 	<h2 class="font-normal text-5xl text-green">
 		Weekly Mileage: {totalMileage.toFixed(2)}
 	</h2>
-	<DateInput bind:value={selectedDate} closeOnSelection={true} />
+	<div class="flex flex-row gap-3">
+		<h3 class="font-normal text-3xl text-blue">Change Week:</h3>
+		<DateInput bind:value={selectedDate} closeOnSelection={true} format={'MM-dd-yyyy'} />
+	</div>
+
 	{#each daysOfTheWeekStartMonday as day}
 		<div class="flex flex-col gap-5">
 			<h3 class="font-normal text-3xl text-blue">{day}</h3>
+			<!-- TODO: Figure out how to type guard this -->
 			{#if sortedActivities.get(day)}
 				{#each sortedActivities.get(day) as activity}
 					<Activity {activity} />
@@ -116,3 +120,12 @@
 		</button>
 	</div>
 </div>
+
+<style>
+	/* Probably janky to do this just to add styles to the calendar but whatever */
+	:root {
+		--date-picker-background: #458588;
+		--date-picker-foreground: #3c3836;
+		--date-input-width: 98px;
+	}
+</style>
