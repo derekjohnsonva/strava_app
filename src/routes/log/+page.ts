@@ -1,10 +1,11 @@
 import type { PageLoad } from './$types';
 import { getActivities } from './utils';
+import type { Fetch } from './utils';
 import { token, startOfWeek, endOfWeek, strava_client_id, strava_client_secret } from '../../store';
 import { get } from 'svelte/store';
 import { redirect } from '@sveltejs/kit';
 
-async function getToken(code: string, fetch) {
+async function getToken(code: string, fetch: Fetch) {
 	const response = await fetch('https://www.strava.com/api/v3/oauth/token', {
 		method: 'POST',
 		headers: {
@@ -21,7 +22,7 @@ async function getToken(code: string, fetch) {
 	return token_new;
 }
 
-async function getRefreshToken(refreshToken: string, fetch) {
+async function getRefreshToken(refreshToken: string, fetch: Fetch) {
 	const response = await fetch('https://www.strava.com/api/v3/oauth/token', {
 		method: 'POST',
 		headers: {
@@ -51,8 +52,15 @@ export const load = (async ({ fetch, url }) => {
 		const expiredDate = get(token)?.expires_at;
 		if (expiredDate && expiredDate * 1000 < new Date().getTime()) {
 			console.log('Token is expired');
-			const new_token = await getRefreshToken(get(token)?.refresh_token, fetch);
-			token.set(new_token);
+			// TODO: This may be bad practice, but I'm not sure how to do it better
+			const token_value = get(token);
+			if (token_value?.refresh_token) {
+				const new_token = await getRefreshToken(token_value.refresh_token, fetch);
+				token.set(new_token);
+			} else {
+				console.error('No refresh token present');
+				throw redirect(300, '/');
+			}
 		}
 	}
 	if (!get(token)?.expires_at) {

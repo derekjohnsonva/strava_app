@@ -15,8 +15,9 @@ export const metersPerSecToMinPerMile = (metersPerSec: number) => {
 	const seconds = Math.floor((fractionalMinutes - minutes) * 60).toFixed(0);
 	return `${minutes}:${seconds}`;
 };
-
-export async function getActivities(fetch, before = 0, after = 0, page = 1, per_page = 60): Promise<Activity[]> {
+// make a type that can be applied to the fetch function
+export type Fetch = (input: URL | RequestInfo, init?: RequestInit | undefined) => Promise<Response>
+export async function getActivities(fetch: Fetch, before = 0, after = 0, page = 1, per_page = 60): Promise<Activity[]> {
 	console.log("Getting activities")
 	let query = `https://www.strava.com/api/v3/activities?page=${page}&per_page=${per_page}`;
 	if (before) {

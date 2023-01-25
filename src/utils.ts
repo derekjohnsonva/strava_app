@@ -12,4 +12,3 @@ export const getWeekRange = (date: Date): WeekRange => {
     end.setHours(23, 59, 59, 999);
     return { start, end };
 }
-const curr = new Date();
