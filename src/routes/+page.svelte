@@ -1,8 +1,8 @@
 
 <script lang="ts">
   import { page } from '$app/stores';
-  console.log("hostename", $page.url.href)
-  const url_base: string = $page.url.href.split('?')[0];
+  console.log("hostename", $page.url.origin)
+  const url_base: string = $page.url.origin.split('?')[0];
 
   const strava_search_params = {
     client_id: "99379",
