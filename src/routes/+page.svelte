@@ -1,11 +1,22 @@
-<script>
-	const strava_signin_link =
-		'https://www.strava.com/oauth/authorize?client_id=99379&response_type=code&redirect_uri=http://localhost:5173/log&approval_prompt=force&scope=profile:read_all,activity:read_all';
 
-	function handleClick() {
-		// reload to the strava signin link
-		location.href = strava_signin_link;
-	}
+<script lang="ts">
+  import { page } from '$app/stores';
+  console.log("hostename", $page.url.href)
+  const url_base: string = $page.url.href.split('?')[0];
+
+  const strava_search_params = {
+    client_id: "99379",
+    response_type: "code",
+    redirect_uri: url_base + "/log",
+    approval_prompt: "force",
+    scope: "profile:read_all,activity:read_all",
+  }
+  const strava_signin_url_base = 'https://www.strava.com/oauth/authorize';
+  const strava_signin_link = strava_signin_url_base + '?' + new URLSearchParams(strava_search_params).toString();
+  function handleClick() {
+    // reload to the strava signin link
+    location.href = strava_signin_link;
+  }
 </script>
 
 <button

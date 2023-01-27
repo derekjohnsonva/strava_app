@@ -41,6 +41,7 @@ async function getRefreshToken(refreshToken: string, fetch: Fetch) {
 
 export const load = (async ({ fetch, url }) => {
 	// TODO: check if token is expired
+	console.log('url', url);
 	const loginCode = url.searchParams.get('code');
 	const token_is_set = get(token) != null;
 	if (!token_is_set && loginCode) {
@@ -70,7 +71,7 @@ export const load = (async ({ fetch, url }) => {
 
 	// get the most recent activities
 	// const curr = new Date();
-	// const startOfWeek = 
+	// const startOfWeek =
 	// const endOfWeek = new Date().setDate(curr.getDate() - (((curr.getDay() + 6) % 7) - 6));
 	// We have to divide by 1000 because Strava expects seconds, not milliseconds
 	const activities = await getActivities(
@@ -81,7 +82,8 @@ export const load = (async ({ fetch, url }) => {
 	console.log('numberOfActivities', activities.length);
 	return {
 		props: {
-			activities: activities
+			activities: activities,
+			fetch: fetch
 		}
 	};
 }) satisfies PageLoad;

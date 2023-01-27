@@ -16,9 +16,15 @@ export const metersPerSecToMinPerMile = (metersPerSec: number) => {
 	return `${minutes}:${seconds}`;
 };
 // make a type that can be applied to the fetch function
-export type Fetch = (input: URL | RequestInfo, init?: RequestInit | undefined) => Promise<Response>
-export async function getActivities(fetch: Fetch, before = 0, after = 0, page = 1, per_page = 60): Promise<Activity[]> {
-	console.log("Getting activities")
+export type Fetch = (input: URL | RequestInfo, init?: RequestInit | undefined) => Promise<Response>;
+export async function getActivities(
+	fetch: Fetch,
+	before = 0,
+	after = 0,
+	page = 1,
+	per_page = 60
+): Promise<Activity[]> {
+	console.log('Getting activities');
 	let query = `https://www.strava.com/api/v3/activities?page=${page}&per_page=${per_page}`;
 	if (before) {
 		query = query + `&before=${before}`;
@@ -37,7 +43,7 @@ export async function getActivities(fetch: Fetch, before = 0, after = 0, page = 
 		console.log('Error getting activities: ', activitySummaries);
 		throw redirect(300, '/');
 	}
-	
+
 	// for each of the activities, get the detailed information
 	const activities = await Promise.all(
 		activitySummaries.map(async (activitySummary) => {
