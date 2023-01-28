@@ -1,21 +1,15 @@
-# create-svelte
+# Strava App
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+The primary goal behind this project is to create a more intuitive user interface
+for myself to use to access Strava.
 
-## Creating a project
+## Building the app
 
-If you're seeing this, you've probably already done this step. Congrats!
+The app is running with svelte-kit.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Install the dependencies with `npm install` (or `pnpm install` or `yarn`)
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Start a development server with
 
 ```bash
 npm run dev
@@ -24,21 +18,10 @@ npm run dev
 npm run dev -- --open
 ```
 
-## Building
+## Deployment
 
-To create a production version of your app:
+Currently, I am running the app on Vercel.
 
-```bash
-npm run build
-```
+It is live [here](https://strava-app-nine.vercel.app/)
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-
-curl -X POST https://www.strava.com/api/v3/oauth/token \
-  -d client_id=99379 \
-  -d client_secret=d0234d7acd6201da562cc3727730c1cbfb0d903a\
-  -d code=cbb5730495ce5382e5c2b31e7ab4a5bb6fa25c7a\
-  -d grant_type=authorization_code
+Go [here](https://vercel.com/derekjohnsonva/strava-app) for the dev console
