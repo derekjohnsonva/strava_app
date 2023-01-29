@@ -2,6 +2,7 @@
 	import { token, startOfWeek, endOfWeek } from '../../store';
 	import { getActivities } from './utils';
 	import { getWeekRange } from '../../utils';
+	import { generatePDF } from './pdf';
 	import Activity from './Activity.svelte';
 	import { metersToMiles } from './utils';
 	import { DateInput } from 'date-picker-svelte';
@@ -110,6 +111,16 @@
 			{/if}
 		</div>
 	{/each}
+	<div class="w-full flex flex-col items-center">
+		<button
+			type="button"
+			class="inline-block w-40 px-6 py-2.5 text-background bg-blue text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue active:shadow-lg transition duration-150 ease-in-out"
+			on:click={() => {
+				generatePDF(data.props.activities);
+			}}
+			>Generate PDF
+		</button>
+	</div>
 	<!-- logout button -->
 	<div class="w-full flex flex-col items-center">
 		<button
