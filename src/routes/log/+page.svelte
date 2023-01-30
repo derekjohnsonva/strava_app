@@ -116,7 +116,7 @@
 			type="button"
 			class="inline-block w-40 px-6 py-2.5 text-background bg-blue text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue active:shadow-lg transition duration-150 ease-in-out"
 			on:click={() => {
-				generatePDF(data.props.activities);
+				generatePDF(sortedActivities);
 			}}
 			>Generate PDF
 		</button>
