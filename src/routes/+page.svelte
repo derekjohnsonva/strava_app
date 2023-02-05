@@ -1,22 +1,21 @@
-
 <script lang="ts">
-  import { page } from '$app/stores';
-  console.log("hostename", $page.url.origin)
-  const url_base: string = $page.url.origin.split('?')[0];
+	import { page } from '$app/stores';
+	const url_base: string = $page.url.origin.split('?')[0];
 
-  const strava_search_params = {
-    client_id: "99379",
-    response_type: "code",
-    redirect_uri: url_base + "/log",
-    approval_prompt: "force",
-    scope: "profile:read_all,activity:read_all",
-  }
-  const strava_signin_url_base = 'https://www.strava.com/oauth/authorize';
-  const strava_signin_link = strava_signin_url_base + '?' + new URLSearchParams(strava_search_params).toString();
-  function handleClick() {
-    // reload to the strava signin link
-    location.href = strava_signin_link;
-  }
+	const strava_search_params = {
+		client_id: '99379',
+		response_type: 'code',
+		redirect_uri: url_base + '/log',
+		approval_prompt: 'force',
+		scope: 'profile:read_all,activity:read_all'
+	};
+	const strava_signin_url_base = 'https://www.strava.com/oauth/authorize';
+	const strava_signin_link =
+		strava_signin_url_base + '?' + new URLSearchParams(strava_search_params).toString();
+	function handleClick() {
+		// reload to the strava signin link
+		location.href = strava_signin_link;
+	}
 </script>
 
 <button

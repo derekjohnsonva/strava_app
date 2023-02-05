@@ -41,7 +41,6 @@ async function getRefreshToken(refreshToken: string, fetch: Fetch) {
 
 export const load = (async ({ fetch, url }) => {
 	// TODO: check if token is expired
-	console.log('url', url);
 	const loginCode = url.searchParams.get('code');
 	const token_is_set = get(token) != null;
 	if (!token_is_set && loginCode) {
@@ -79,7 +78,6 @@ export const load = (async ({ fetch, url }) => {
 		Math.floor(get(endOfWeek).getTime() / 1000),
 		Math.floor(get(startOfWeek).getTime() / 1000),
 	);
-	console.log('numberOfActivities', activities.length);
 	return {
 		props: {
 			activities: activities,
