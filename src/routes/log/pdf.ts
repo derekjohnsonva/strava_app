@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import { token, startOfWeek, endOfWeek } from '../../store';
+import { startOfWeek, endOfWeek } from '../../store';
 import { get } from 'svelte/store';
 import autoTable, { type ColumnInput, type RowInput } from 'jspdf-autotable'
 import { metersPerSecToMinPerMile, metersToMiles } from './utils';
@@ -45,16 +45,15 @@ const createRows = (activities: Map<string, Activity[]>): RowInput[] => {
 	return result;
 };
 
-export const generatePDF = (activities: Map<string, Activity[]>) => {
+export const generatePDF = (activities: Map<string, Activity[]>, total_miles: string, overview_text: string) => {
 	console.log('generating PDF');
 	const doc = new jsPDF();
 	// Make the title
 	const startDate = new Date(get(startOfWeek));
 	const endDate = new Date(get(endOfWeek));
 	const dateRange = `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
-	const athlete_name = get(token)?.athlete?.firstname;
 	doc.setFontSize(20);
-	doc.text(`${athlete_name}'s Weekly Log`, 14, 22);
+	doc.text(`Weekly Log`, 14, 22);
 	doc.setFontSize(12);
 	doc.text(dateRange, 14, 30);
 	autoTable(doc, {
@@ -62,5 +61,11 @@ export const generatePDF = (activities: Map<string, Activity[]>) => {
 		body: createRows(activities),
 		startY: 40,
 	});
-	doc.save(`${athlete_name}: ${dateRange}.pdf`);
+
+	// Add total distance
+	doc.text(`Total Distance: ${total_miles} miles`, 14, doc.autoTable.previous.finalY + 10);
+	const split_overview_text = doc.splitTextToSize(overview_text, 180);
+	doc.setFontSize(10);
+	doc.text(split_overview_text, 14, doc.autoTable.previous.finalY + 20);
+	doc.save(`Weekly Log: ${dateRange}.pdf`);
 };

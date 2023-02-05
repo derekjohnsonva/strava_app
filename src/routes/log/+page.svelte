@@ -87,6 +87,8 @@
 				});
 		}
 	}
+
+	let weekly_overview: string = '';
 </script>
 
 <div class="max-w-6xl flex flex-col gap-9">
@@ -111,12 +113,22 @@
 			{/if}
 		</div>
 	{/each}
+
+	<textarea
+		bind:value={weekly_overview}
+		name="weekly_overview"
+		id=""
+		cols="15"
+		rows="5"
+		placeholder="Write weekly overview to be included in pdf"
+	/>
+
 	<div class="w-full flex flex-col items-start">
 		<button
 			type="button"
 			class="inline-block w-auto px-6 py-2.5 text-background bg-blue text-white font-medium text-m leading-tight uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue active:shadow-lg transition duration-150 ease-in-out"
 			on:click={() => {
-				generatePDF(sortedActivities);
+				generatePDF(sortedActivities, totalMileage.toString(), weekly_overview);
 			}}
 			>Generate PDF
 		</button>
