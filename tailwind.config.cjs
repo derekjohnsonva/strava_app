@@ -6,7 +6,7 @@ module.exports = {
       sans: ["Noto Sans", "sans-serif"],
     },
     colors: {
-      'background': '#3C3836',
+      'background': '#282828',
       'orange': '#D65D0E',
       'green': '#98971A',
       'blue': '#458588',
