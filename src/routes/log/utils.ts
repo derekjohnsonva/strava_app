@@ -13,7 +13,8 @@ export const metersPerSecToMinPerMile = (metersPerSec: number) => {
 	// convert fractional minutes to minutes and seconds
 	const minutes = Math.floor(fractionalMinutes);
 	const seconds = Math.floor((fractionalMinutes - minutes) * 60).toFixed(0);
-	return `${minutes}:${seconds}`;
+	// add leading zero if seconds is less than 10 using padStart
+	return `${minutes}:${seconds.padStart(2, '0')}`;
 };
 // make a type that can be applied to the fetch function
 export type Fetch = (input: URL | RequestInfo, init?: RequestInit | undefined) => Promise<Response>;
