@@ -62,5 +62,5 @@ export const generatePDF = (activities: Map<string, Activity[]>) => {
 		body: createRows(activities),
 		startY: 40,
 	});
-	doc.save('example.pdf');
+	doc.save(`${athlete_name}: ${dateRange}.pdf`);
 };
