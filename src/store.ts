@@ -4,7 +4,10 @@ import { persistBrowserSession } from '@macfja/svelte-persistent-store';
 import type { PersistentStore } from '@macfja/svelte-persistent-store';
 import type { StravaToken } from './types';
 
-export const token: PersistentStore<null | StravaToken> = persistBrowserSession(writable(null), 'token');
+export const token: PersistentStore<null | StravaToken> = persistBrowserSession(
+	writable(null),
+	'token'
+);
 const curr = new Date();
 const weekRange = getWeekRange(curr);
 export const startOfWeek = writable(weekRange.start);

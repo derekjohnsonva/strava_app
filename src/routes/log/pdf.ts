@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf';
 import { startOfWeek, endOfWeek } from '../../store';
 import { get } from 'svelte/store';
-import autoTable, { type ColumnInput, type RowInput } from 'jspdf-autotable'
+import autoTable, { type ColumnInput, type RowInput } from 'jspdf-autotable';
 import { metersPerSecToMinPerMile, metersToMiles } from './utils';
 import type { Activity } from 'src/types';
 
@@ -18,12 +18,12 @@ const daysOfTheWeekStartMonday = [
 
 const getHeaders = (): ColumnInput[] => {
 	return [
-		{title: "Day", dataKey: "day"},
-		{title: "Name", dataKey: "name"},
-		{title: "Distance", dataKey: "distance"},
-		{title: "Pace", dataKey: "pace"},
-		{title: "Description", dataKey: "description"},
-	]
+		{ title: 'Day', dataKey: 'day' },
+		{ title: 'Name', dataKey: 'name' },
+		{ title: 'Distance', dataKey: 'distance' },
+		{ title: 'Pace', dataKey: 'pace' },
+		{ title: 'Description', dataKey: 'description' }
+	];
 };
 
 const createRows = (activities: Map<string, Activity[]>): RowInput[] => {
@@ -33,11 +33,11 @@ const createRows = (activities: Map<string, Activity[]>): RowInput[] => {
 		if (dayActivities) {
 			dayActivities.forEach((activity) => {
 				result.push({
-					"day": day,
-					"name": activity.name,
-					"distance": metersToMiles(activity.distance),
-					"pace": metersPerSecToMinPerMile(activity.average_speed),
-					"description": activity.description
+					day: day,
+					name: activity.name,
+					distance: metersToMiles(activity.distance),
+					pace: metersPerSecToMinPerMile(activity.average_speed),
+					description: activity.description
 				});
 			});
 		}
@@ -45,7 +45,11 @@ const createRows = (activities: Map<string, Activity[]>): RowInput[] => {
 	return result;
 };
 
-export const generatePDF = (activities: Map<string, Activity[]>, total_miles: string, overview_text: string) => {
+export const generatePDF = (
+	activities: Map<string, Activity[]>,
+	total_miles: string,
+	overview_text: string
+) => {
 	console.log('generating PDF');
 	const doc = new jsPDF();
 	// Make the title
@@ -59,7 +63,7 @@ export const generatePDF = (activities: Map<string, Activity[]>, total_miles: st
 	autoTable(doc, {
 		columns: getHeaders(),
 		body: createRows(activities),
-		startY: 40,
+		startY: 40
 	});
 
 	// Add total distance

@@ -76,7 +76,7 @@ export const load = (async ({ fetch, url }) => {
 	const activities = await getActivities(
 		fetch,
 		Math.floor(get(endOfWeek).getTime() / 1000),
-		Math.floor(get(startOfWeek).getTime() / 1000),
+		Math.floor(get(startOfWeek).getTime() / 1000)
 	);
 	return {
 		props: {
